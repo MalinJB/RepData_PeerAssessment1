@@ -13,18 +13,6 @@ transformed into the class 'date'.
 
 ```r
 activity <- read.csv("activity.csv")
-```
-
-```
-## Warning in file(file, "rt"): cannot open file 'activity.csv': No such file
-## or directory
-```
-
-```
-## Error in file(file, "rt"): cannot open the connection
-```
-
-```r
 activity$date <- as.Date(activity$date)
 ```
 
@@ -61,7 +49,7 @@ median(stepsPerDay$steps)
 ```
 
 ```
-## [1] 10766.19
+## [1] 10765
 ```
 
 
@@ -93,7 +81,7 @@ avgSteps[maxSteps, ]
 
 ```
 ##     interval    steps
-## 104      835 184.0338
+## 104      835 206.1698
 ```
 
 
@@ -108,7 +96,7 @@ numberNA
 ```
 
 ```
-## [1] 0
+## [1] 2304
 ```
 
 ```r
@@ -116,7 +104,7 @@ numberNA / length(activity$steps) * 100
 ```
 
 ```
-## [1] 0
+## [1] 13.11475
 ```
 
 The mean step value for each day was used to impede the NAs of the same day
@@ -129,10 +117,6 @@ na <- mean(avSteps, na.rm = TRUE)
 for(i in 1:l) {
         activity[NAs[i], 1] <- na
 }
-```
-
-```
-## Error in `[<-.data.frame`(`*tmp*`, NAs[i], 1, value = 37.3825995807128): missing values are not allowed in subscripted assignments of data frames
 ```
 A histogram showing the total number of steps taken each day after NAs were 
 replaced by the daily average. 
