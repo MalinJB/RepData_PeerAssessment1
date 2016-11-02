@@ -10,15 +10,29 @@ This report answers questions related to the "Activity monitoring data set".
 The data set was loaded using read.csv as below and the date column was 
 transformed into the class 'date'.
 
-```{r load, echo = TRUE}
+
+```r
 activity <- read.csv("activity.csv")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'activity.csv': No such file
+## or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+```r
 activity$date <- as.Date(activity$date)
 ```
 
 
 ## What is mean total number of steps taken per day?
 A histogram plot shows the total number of steps taken each day.
-```{r total steps, echo = TRUE}
+
+```r
 stepsPerDay <- aggregate(steps ~ date, activity, FUN = sum)
 hist(stepsPerDay$steps,
      breaks = 20,
@@ -30,16 +44,31 @@ hist(stepsPerDay$steps,
      )
 ```
 
+![plot of chunk total steps](figure/total steps-1.png)
+
 The mean and median of the total number of steps per day are:
-```{r total steps mean and median, echo = TRUE}
+
+```r
 mean(stepsPerDay$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(stepsPerDay$steps)
+```
+
+```
+## [1] 10766.19
 ```
 
 
 ## What is the average daily activity pattern?
 A time-series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r average steps, echo = TRUE}
+
+```r
 avgSteps <- aggregate(steps ~ interval, activity, FUN = mean, na.rm = TRUE) 
                                                
 plot(avgSteps$interval, avgSteps$steps,
@@ -52,11 +81,19 @@ plot(avgSteps$interval, avgSteps$steps,
      )                
 ```
 
+![plot of chunk average steps](figure/average steps-1.png)
+
 The 5-minute interval that contains the maximum number of steps is number 835
 and it corresponds to 206 steps. 
-```{r max steps, echo = TRUE}
+
+```r
 maxSteps <- which.max(avgSteps$steps)
 avgSteps[maxSteps, ]
+```
+
+```
+##     interval    steps
+## 104      835 184.0338
 ```
 
 
@@ -64,14 +101,27 @@ avgSteps[maxSteps, ]
 
 The total number of missing values in the dataset is (absolut number followed 
 by %)
-```{r NA, echo = TRUE}
+
+```r
 numberNA <- sum(is.na(activity$steps))
 numberNA
+```
+
+```
+## [1] 0
+```
+
+```r
 numberNA / length(activity$steps) * 100
 ```
 
+```
+## [1] 0
+```
+
 The mean step value for each day was used to impede the NAs of the same day
-```{r NA impeded, echo = TRUE}
+
+```r
 NAs <- which(is.na(activity$steps))
 l <- length(NAs)
 avSteps <- with(activity, tapply(steps, date, mean, na.rm = TRUE))
@@ -80,9 +130,14 @@ for(i in 1:l) {
         activity[NAs[i], 1] <- na
 }
 ```
+
+```
+## Error in `[<-.data.frame`(`*tmp*`, NAs[i], 1, value = 37.3825995807128): missing values are not allowed in subscripted assignments of data frames
+```
 A histogram showing the total number of steps taken each day after NAs were 
 replaced by the daily average. 
-```{r total steps no NA, echo = TRUE}
+
+```r
 stepsPerDay2 <- aggregate(steps ~ date, activity, FUN = sum)
 hist(stepsPerDay2$steps,
      breaks = 20,
@@ -94,12 +149,26 @@ hist(stepsPerDay2$steps,
 )
 ```
 
+![plot of chunk total steps no NA](figure/total steps no NA-1.png)
+
 
 The mean and median values have changed slightly from before NAs were impeded. 
 The new values are:
-```{r total steps mean and median no NA, echo = TRUE}
+
+```r
 mean(stepsPerDay2$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(stepsPerDay2$steps)
+```
+
+```
+## [1] 10766.19
 ```
 
 
@@ -109,7 +178,8 @@ median(stepsPerDay2$steps)
 
 The mean number of steps during weekdays and during weekends are shown in the graph below. 
 
-```{r weekdays and weekends, echo = TRUE}
+
+```r
 library(ggplot2)
 library(plyr)
 
@@ -123,3 +193,5 @@ ggplot(stepsPerDaytype, aes(interval, steps)) +
         labs(x = "Interval", y = "Number of steps",
              title = "Activity patterns weekdays vs. weekends")
 ```
+
+![plot of chunk weekdays and weekends](figure/weekdays and weekends-1.png)
